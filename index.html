@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Interviewer Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="screen active">
+        <div class="container">
+            <div class="header">
+                <div class="ai-ball-small">
+                    <div class="ball-inner"></div>
+                </div>
+                <h1 class="title">AI Voice Interviewer Pro</h1>
+                <p class="subtitle">Professional Interview Assistant with AI</p>
+            </div>
+
+            <div class="card">
+                <h2>🏢 Select Company</h2>
+                <p class="description">Choose a company to start your practice interview</p>
+                
+                <div class="form-group">
+                    <label for="companySelect">Company:</label>
+                    <select id="companySelect" class="company-select">
+                        <option value="">Loading companies...</option>
+                    </select>
+                </div>
+
+                <div class="company-info" id="companyInfo" style="display: none;">
+                    <div class="info-item">
+                        <span class="label">Total Questions:</span>
+                        <span class="value" id="questionCount">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Questions Selected:</span>
+                        <span class="value">5 Random Questions</span>
+                    </div>
+                </div>
+
+                <button id="startButton" class="btn btn-primary" disabled>
+                    <span>🚀 Start Interview</span>
+                </button>
+
+                <div class="admin-link">
+                    <a href="#" id="manageQuestionsLink">⚙️ Manage Questions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Screen -->
+    <div id="adminScreen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h1 class="title">Question Management</h1>
+                <button id="backToHome" class="btn btn-secondary">← Back to Home</button>
+            </div>
+
+            <div class="card">
+                <h2>Add New Question</h2>
+                
+                <div class="form-group">
+                    <label for="adminCompany">Company Name:</label>
+                    <input type="text" id="adminCompany" placeholder="e.g., Google, Microsoft, Amazon">
+                </div>
+
+                <div class="form-group">
+                    <label for="adminQuestion">Question:</label>
+                    <textarea id="adminQuestion" rows="3" placeholder="Enter interview question"></textarea>
+                </div>
+
+                <button id="addQuestionBtn" class="btn btn-primary">
+                    <span>➕ Add Question</span>
+                </button>
+            </div>
+
+            <div class="card">
+                <h2>Existing Questions</h2>
+                <div class="form-group">
+                    <label for="filterCompany">Filter by Company:</label>
+                    <select id="filterCompany" class="company-select">
+                        <option value="">All Companies</option>
+                    </select>
+                </div>
+                <div id="questionsList" class="questions-list">
+                    <p class="loading">Loading questions...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Screen -->
+    <div id="interviewScreen" class="screen">
+        <div class="interview-container">
+            <!-- Left Side: Video & AI Ball -->
+            <div class="video-section">
+                <div class="video-container">
+                    <video id="userVideo" autoplay muted playsinline></video>
+                    <div class="recording-indicator" id="recordingIndicator">
+                        <span class="pulse"></span>
+                        <span>Recording</span>
+                    </div>
+                </div>
+
+                <!-- Animated AI Ball -->
+                <div class="ai-ball-container">
+                    <div class="ai-ball" id="aiBall">
+                        <div class="ball-core"></div>
+                        <div class="ball-ring ring-1"></div>
+                        <div class="ball-ring ring-2"></div>
+                        <div class="ball-ring ring-3"></div>
+                        <div class="ball-particles"></div>
+                    </div>
+                    <p class="ai-status" id="aiStatus">Listening...</p>
+                    <div class="sound-wave" id="soundWave">
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Question & Controls -->
+            <div class="question-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <span class="progress-text" id="progressText">Question 1 of 5</span>
+                </div>
+
+                <div class="question-card">
+                    <h3>Current Question</h3>
+                    <p class="question-text" id="questionText">Loading question...</p>
+                </div>
+
+                <div class="answer-card">
+                    <h3>Your Answer</h3>
+                    <div class="answer-text" id="answerText">
+                        <p class="placeholder">Your transcribed answer will appear here...</p>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="listenBtn" class="btn btn-listen">
+                        <span>🎤</span>
+                        <span>Listen to Answer</span>
+                    </button>
+                    <button id="typeBtn" class="btn btn-secondary">
+                        <span>⌨️</span>
+                        <span>Type Answer</span>
+                    </button>
+                    <button id="nextBtn" class="btn btn-next" disabled>
+                        <span>Next Question →</span>
+                    </button>
+                    <button id="finishBtn" class="btn btn-danger">
+                        <span>✓ Finish Interview</span>
+                    </button>
+                </div>
+
+                <div class="status-message" id="statusMessage">
+                    Click "Listen to Answer" to start recording your response
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="success-icon">🎉</div>
+                <h1 class="title">Interview Complete!</h1>
+                <p class="subtitle">Great job! Here's your interview summary</p>
+            </div>
+
+            <div class="card results-card">
+                <div class="results-summary">
+                    <div class="result-item">
+                        <span class="result-label">Company:</span>
+                        <span class="result-value" id="resultCompany">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Questions Answered:</span>
+                        <span class="result-value" id="resultAnswered">0/5</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Date:</span>
+                        <span class="result-value" id="resultDate">-</span>
+                    </div>
+                </div>
+
+                <h3>Your Responses</h3>
+                <div id="responsesList" class="responses-list"></div>
+
+                <div class="result-actions">
+                    <button id="downloadBtn" class="btn btn-primary">
+                        <span>📥 Download Results (JSON)</span>
+                    </button>
+                    <button id="downloadVideoBtn" class="btn btn-secondary">
+                        <span>🎥 Download Video</span>
+                    </button>
+                    <button id="newInterviewBtn" class="btn btn-accent">
+                        <span>🔄 Start New Interview</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- Main App Script -->
+    <script src="app.js"></script>
+</body>
+</html>
